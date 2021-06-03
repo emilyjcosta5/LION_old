@@ -12,7 +12,7 @@ from os.path import join, isfile, exists
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-def collect_darshan_data(path_to_total, path_to_all=None, threshold=40, ranks=None, save_path='./run_info.parquet', chunksize=1000, verbose=False):
+def collect_darshan_data(path_to_total, ranks=None, save_path='./run_info.parquet', chunksize=1000, verbose=False):
     '''
     Collects data from Darshan logs that can be used for clustering and
     analysis of those clusters.
@@ -22,19 +22,15 @@ def collect_darshan_data(path_to_total, path_to_all=None, threshold=40, ranks=No
     path_to_total: string
         Path to Darshan logs parsed in the 'total' format. The logs should be
         sorted by user ID and executable name.
-    path_to_all: string, optional
-        Path to Darshan logs parsed in the 'all' format. The logs should be
-        sorted by user ID and executable name. If None, then only information 
-        from the 'total' logs will be used in clustering later. These files
-        contain the 'shared' and 'unique' file count.
-    threshold: int, optional
-        The threshold for how many times an application needs to be run in 
-        order to be included in the data collection.
     ranks: int, optional
         Parallize the data collection by increasing the number of processes
         collecting and saving the data.
     save_path: string, optional
         Where to save the collected data.
+    chunksize: int, optional
+        In order to checkpoint data and continue if data collection is halted,
+        set this to the number of runs to collect info on per "chunk". This will
+        get the program to write the info to the output file with the final info.
     verbose: boolean, optional
         For debugging and info on amount of info being collected.
     
@@ -57,20 +53,8 @@ def collect_darshan_data(path_to_total, path_to_all=None, threshold=40, ranks=No
         fs = np.setdiff1d(fs,f_fs)
         for fn in fs:
             dirs_info.append(join(root,fn))
-    '''
-    for root, ds, fs in walk(path_to_total):
-        for i in range(0,1000):
-            dirs_info.append(join(root,fs[i]))
-    '''
     if(verbose):
         print('Total Darshan logs: %d'%len(dirs_info))
-    #runs = [] # Save run paths to collect info: application/run_file.darshan
-    '''
-    for i in pool.imap_unordered(_get_runs, dirs_info):
-        if(i is None):
-            continue
-        runs.extend(i)
-    '''
     pqwriter = None
     # Now collect data
     data = pd.DataFrame()
@@ -108,10 +92,7 @@ def collect_darshan_data(path_to_total, path_to_all=None, threshold=40, ranks=No
         pqwriter.close()
     total_files = data.shape[0]+chunk_number*chunksize
     if(verbose):
-        print('Files collected total %d in %d chunks.'%(total_files,chunk_number+1))
-    # Save the collected data
-    #if(save_path!=None):
-    #    data.to_parquet(save_path)
+        print('Files collected total %d in %d chunks.'%(total_files,chunk_number+1)
     return data
 
 def _get_runs(dir_info):
