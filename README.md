@@ -12,15 +12,23 @@ After parsing the Darshan logs, we can now begin running our Python scripts. Usi
 `   path_to_total: string
         Path to Darshan logs parsed in the 'total' format. The logs should be
         sorted by user ID and executable name.
+
+
     ranks: int, optional
         Parallize the data collection by increasing the number of processes
         collecting and saving the data.
+
+
     save_path: string, optional
         Where to save the collected data.
+
+
     chunksize: int, optional
         In order to checkpoint data and continue if data collection is halted,
         set this to the number of runs to collect info on per "chunk". This will
         get the program to write the info to the output file with the final info.
+
+
     verbose: boolean, optional
         For debugging and info on amount of info being collected.`
   
@@ -32,18 +40,28 @@ Next, using the information collected in the previous step, we can cluster the r
         Dataframe containing the run info for clustering, as collected from 
         a function in data_collection. Needs application, time, and cluster
         parameters.
+
+
     threshold: int, optional
         The threshold for how many times an application needs to be run in 
         order to be included in the data collection.
+
+
     ranks: int, optional
         Parallize the data collection by increasing the number of processes
         collecting and saving the data.
+
+
     save_path: string, optional
         Where to save the collected data.
+
+
     chunksize: int, optional
         In order to checkpoint data and continue if data collection is halted,
         set this to the number of runs to collect info on per "chunk". This will
         get the program to write the info to the output file with the final info.
+
+
     verbose: boolean, optional
         For debugging and info on amount of info being collected.`
 
