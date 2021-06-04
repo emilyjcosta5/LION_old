@@ -28,6 +28,10 @@ def cluster_runs(run_info, ranks=None, threshold=40, save_path=None, chunksize=1
         collecting and saving the data.
     save_path: string, optional
         Where to save the collected data.
+    chunksize: int, optional
+        In order to checkpoint data and continue if data collection is halted,
+        set this to the number of runs to collect info on per "chunk". This will
+        get the program to write the info to the output file with the final info.
     verbose: boolean, optional
         For debugging and info on amount of info being collected.
 
