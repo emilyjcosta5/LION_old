@@ -8,7 +8,7 @@ import pandas as pd
 import math
 import os 
 
-def cluster_characteristics(path_to_clusters, save_path='./figures/cluster_characteristics.pdf', plot_log=False, verbose=False):
+def cluster_characteristics(cluster_info, save_path='./figures/cluster_characteristics.pdf', plot_log=False, verbose=False):
     '''
     Analyzes the number of clusters by application and number of runs by cluster.
     Plots the CDF of both the metrics.
@@ -30,12 +30,12 @@ def cluster_characteristics(path_to_clusters, save_path='./figures/cluster_chara
     # Initialize plot
     fig, axes = plt.subplots(2,1)
     # Read the data
-    df = pd.read_parquet(path_to_clusters, index_col=0)
+    df = cluster_info
     # Collect Read Info
     operation = 'Read'
     if verbose:
         print('Analyzing %s clusters...'%operation)
-    mask = df['Operation'] == operation
+    mask = df['Operation'] == operation 
     pos = np.flatnonzero(mask)
     tmp = df.iloc[pos]
     no_runs_by_cluster = []
@@ -48,12 +48,12 @@ def cluster_characteristics(path_to_clusters, save_path='./figures/cluster_chara
         cluster_nos = tmp_app['Cluster Number'].unique().tolist()
         no_clusters_by_app.append(len(cluster_nos))
         for cluster_no in cluster_nos:
-            no_runs_by_cluster(tmp_app.iloc[np.flatnonzero(tmp_app['Cluster Number'] == cluster_no)].shape[0])
+            no_runs_by_cluster.append(tmp_app.iloc[np.flatnonzero(tmp_app['Cluster Number'] == cluster_no)].shape[0])
     # Plot Read Info
     # First, number of cluster by applications
     if verbose:
         print('Plotting info of %s clusters...'%operation)
-    median = np.median(no_clusters_by_app)
+    median = np.median(no_clusters_by_app)-1
     if verbose:
         print("Median of %s clusters in the applications: %d"%(operation,median))
     bins = np.arange(0, int(math.ceil(max(no_clusters_by_app)))+1, 1)
@@ -89,12 +89,12 @@ def cluster_characteristics(path_to_clusters, save_path='./figures/cluster_chara
         cluster_nos = tmp_app['Cluster Number'].unique().tolist()
         no_clusters_by_app.append(len(cluster_nos))
         for cluster_no in cluster_nos:
-            no_runs_by_cluster(tmp_app.iloc[np.flatnonzero(tmp_app['Cluster Number'] == cluster_no)].shape[0])
+            no_runs_by_cluster.append(tmp_app.iloc[np.flatnonzero(tmp_app['Cluster Number'] == cluster_no)].shape[0])
     # Plot Write Info
     # First, number of cluster by applications
     if verbose:
         print('Plotting info of %s clusters...'%operation)
-    median = np.median(no_clusters_by_app)
+    median = np.median(no_clusters_by_app)-1
     if verbose:
         print("Median of %s clusters in the applications: %d"%(operation,median))
     bins = np.arange(0, int(math.ceil(max(no_clusters_by_app)))+1, 1)
@@ -115,10 +115,17 @@ def cluster_characteristics(path_to_clusters, save_path='./figures/cluster_chara
     axes[1].axvline(median, color='maroon', zorder=0, linestyle=':', linewidth=2)
     # Overall figure aesthetics 
     axes[0].set_xlabel('CDF of Applications')
-    axes[1].set_ylabel('Number of Clusters')
-    axes[0].set_xlabel('CDF of Clusters')
+    axes[0].set_ylabel('Number of Clusters')
+    axes[1].set_xlabel('CDF of Clusters')
     axes[1].set_ylabel('Number of Runs')
     axes[1].legend()
+    axes[0].legend()
+    axes[0].set_ylim(0,1)
+    axes[1].set_ylim(0,1)
+    vals = axes[0].get_yticks()
+    axes[0].set_yticklabels(['{:,.0%}'.format(x) for x in vals])
+    vals = axes[1].get_yticks()
+    axes[1].set_yticklabels(['{:,.0%}'.format(x) for x in vals])
     fig.tight_layout()
     save_dir = "/".join(save_path.split('/')[:-1])
     if not os.path.exists(save_dir):
@@ -159,6 +166,3 @@ def io_performance_variability():
     I/O amount, check is cluster size is factor, temporal phasing.
     '''
     return None
-
-if __name__=='__main__':
-    # Generate dummy data

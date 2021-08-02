@@ -92,7 +92,7 @@ def collect_darshan_data(path_to_total, ranks=None, save_path='./run_info.parque
         pqwriter.close()
     total_files = data.shape[0]+chunk_number*chunksize
     if(verbose):
-        print('Files collected total %d in %d chunks.'%(total_files,chunk_number+1)
+        print('Files collected total %d in %d chunks.'%(total_files,chunk_number+1))
     return data
 
 def _get_runs(dir_info):

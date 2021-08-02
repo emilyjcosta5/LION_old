@@ -44,10 +44,14 @@ def cluster_runs(run_info, ranks=None, threshold=40, save_path=None, chunksize=1
         ranks = cpu_count()
     pool = Pool(processes=ranks)
     args = []
-    for a in run_info['Application'].unique().tolist():
+    for a in run_info['Application'].unique():
         mask = run_info['Application'] == a
         pos = np.flatnonzero(mask)
-        if(run_info.iloc[pos].shape[0]>threshold):
+        tmp = run_info.iloc[pos]
+        tmp = tmp.shape[0]
+        if(verbose):
+            print('Size of application %s is %d'%(a,tmp))
+        if(tmp>threshold):
             args.append([a,run_info,threshold])
     clusters = pd.DataFrame()
     start = time.time()
@@ -79,7 +83,11 @@ def cluster_runs(run_info, ranks=None, threshold=40, save_path=None, chunksize=1
     table = pa.Table.from_pandas(clusters)
     if(chunk_number==1):
         pqwriter = pq.ParquetWriter(save_path, table.schema)
-    pqwriter.write_table(table)
+    try:
+        pqwriter.write_table(table)
+    except ValueError:
+        if(verbose):
+            print('Chunk %d produced 0 clusters'%chunk_number)
     if(pqwriter):
         pqwriter.close()
     total_files = clusters.shape[0]+chunk_number*chunksize
