@@ -1,0 +1,9 @@
+sample_darshan_data/cluster_info.parquet
+sample_darshan_data/parse.sh
+sample_darshan_data/run_info.parquet
+sample_darshan_data/unparsed/
+darshan-3.3.1.tar.gz
+darshan-3.3.1/
+__pycache__/
+.analysis_and_plots.py.swp
+figures/
