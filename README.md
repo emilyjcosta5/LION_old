@@ -2,11 +2,11 @@
 
 As I/O demand of scientific applications increases, identifying, predicting, and analyzing I/O behaviors is critical to ensure parallel storage systems are efficiently utilized. In order to address this issue, Library for I/O Nerds (LION) is a comprehensive library for analyzing Darshan logs collected on high-performance computing (HPC) systems and understand the I/O nature of the applications running on a production HPC system.
 
-## Dependencies
+## Software and Dependencies
 
 Darshan is available here: https://www.mcs.anl.gov/research/projects/darshan/download/
 Darshan util installation instructions needed for parsing files: https://www.mcs.anl.gov/research/projects/darshan/docs/darshan-util.html
-Pyarrow
+Python dependies: pyarrow, numpy, pandas, sklearn, multiprocessing, matplotlib 
 
 ## Usage and Instructions
 The three major steps in identifying I/O behaviors are (1) data engineering, (2) clustering runs, and (3) analysis. 
@@ -15,7 +15,10 @@ To use the Darshan logs, we first untar and parse them in order to access the lo
 `darshan-parser --total`. An example script for extracting and parsing the Darshan logs into a new directory is as follows:
 
 `
-
+for FILE in *.darshan
+do
+	darshan-parser --total $FILE >> $FILE-parsed
+done
 `
 ### 1. Collect I/O Info
 After parsing the Darshan logs, we can now begin running our Python scripts. Using `LION.data_collection.collect_darshan_data` we can now scrap the necessary data for clustering the files by run I/O characteristics. This function takes the following inputs:
