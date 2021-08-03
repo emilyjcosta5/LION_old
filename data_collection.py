@@ -115,8 +115,13 @@ def _collect_data(run):
             print('Read err%s'%file)
         f.close()
     try: 
+        # add: start time, end time, performance
+        start_time = lines[5].split(' ')[-1]
+        end_time = lines[7].split(' ')[-1]
         read_size   = int([line for line in lines if 'total_POSIX_BYTES_READ:'    in line][0][23:])
         write_size  = int([line for line in lines if 'total_POSIX_BYTES_WRITTEN:' in line][0][26:])
+        read_time   = float([line for line in lines if 'total_POSIX_F_READ_TIME:'   in line][0][24:])
+        write_time  = float([line for line in lines if 'total_POSIX_F_WRITE_TIME:'  in line][0][25:])
         read_0_100       = int([line for line in lines if 'total_POSIX_SIZE_READ_0_100:'       in line][0][28:])
         read_100_1K      = int([line for line in lines if 'total_POSIX_SIZE_READ_100_1K:'      in line][0][29:])
         read_1K_10K      = int([line for line in lines if 'total_POSIX_SIZE_READ_1K_10K:'      in line][0][29:])
@@ -146,6 +151,11 @@ def _collect_data(run):
         exe = exe[-1]
     else:
         exe = exe[-1][7:]
+    try:
+        read_perf = read_size/read_time
+        write_perf = write_size/write_time
+    except ZeroDivisionError:
+        return None
     exe = exe.split(" ")
     exe = exe[0]
     exe = exe.strip()
@@ -155,6 +165,7 @@ def _collect_data(run):
             'Read 100K-1M': read_100K_1M, 'Read 1M-4M': read_1M_4M, 'Read 4M-10M': read_4M_10M, 'Read 10M-100M': read_10M_100M,
             'Read 100M-1G': read_100M_1G, 'Read 1G+': read_1G_plus, 'Write 0-100': write_0_100, 'Write 100-1K': write_100_1K, 
             'Write 1K-10K': write_1K_10K, 'Write 10K-100K': write_10K_100K, 'Write 100K-1M': write_100K_1M, 'Write 1M-4M': write_1M_4M, 
-            'Write 4M-10M': write_4M_10M, 'Write 10M-100M': write_10M_100M, 'Write 100M-1G': write_100M_1G, 'Write 1G+': write_1G_plus}
+            'Write 4M-10M': write_4M_10M, 'Write 10M-100M': write_10M_100M, 'Write 100M-1G': write_100M_1G, 'Write 1G+': write_1G_plus,
+            'Read Performance': read_perf, 'Write Performance': write_perf, 'Start Time': start_time, 'End Time': end_time}
     return d
 

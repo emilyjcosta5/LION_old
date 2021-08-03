@@ -105,7 +105,9 @@ def _cluster_with_run_info(args):
     if(df_results.shape[0]<threshold):
         return None
     # Standardize
-    df_results = df_results.set_index(['Filename','Application'])
+    df_results['Amount of Write I/O, Scaled'] = df_results['Amount of Write I/O']
+    df_results['Amount of Read I/O, Scaled'] = df_results['Amount of Read I/O']
+    df_results = df_results.set_index(['Filename', 'Application', 'Read Performance', 'Write Performance', 'Amount of Write I/O', 'Amount of Read I/O', 'Start Time', 'End Time'])
     scaler = StandardScaler() 
     try:
         df_scaled = scaler.fit_transform(df_results)
@@ -113,14 +115,15 @@ def _cluster_with_run_info(args):
         return None
     df_scaled = pd.DataFrame(df_scaled, index=df_results.index, columns=df_results.columns).reset_index()
     # Clustering
-    X = df_scaled[['Amount of Write I/O', 'Write 0-100', 'Write 100-1K', 'Write 1K-10K', 'Write 10K-100K', 'Write 100K-1M', 'Write 1M-4M', 
+    X = df_scaled[['Amount of Write I/O, Scaled', 'Write 0-100', 'Write 100-1K', 'Write 1K-10K', 'Write 10K-100K', 'Write 100K-1M', 'Write 1M-4M', 
                     'Write 4M-10M', 'Write 10M-100M', 'Write 100M-1G', 'Write 1G+']].copy()
     clustering_writes = AgglomerativeClustering(n_clusters=None, compute_full_tree=True, distance_threshold=0.1).fit(X)
     df_results['Cluster Write'] = clustering_writes.labels_
-    X = df_scaled[['Amount of Read I/O', 'Read 0-100', 'Read 100-1K', 'Read 1K-10K', 'Read 10K-100K','Read 100K-1M', 'Read 1M-4M', 
+    X = df_scaled[['Amount of Read I/O, Scaled', 'Read 0-100', 'Read 100-1K', 'Read 1K-10K', 'Read 10K-100K','Read 100K-1M', 'Read 1M-4M', 
                     'Read 4M-10M', 'Read 10M-100M', 'Read 100M-1G', 'Read 1G+']].copy()
     clustering_reads  = AgglomerativeClustering(n_clusters=None, compute_full_tree=True, distance_threshold=0.1).fit(X)
     df_results['Cluster Read'] = clustering_reads.labels_
+    print(df_results)
     # Divide by cluster
     max_read  = df_results['Cluster Read'].max()
     max_write = df_results['Cluster Write'].max()
@@ -137,7 +140,8 @@ def _cluster_with_run_info(args):
             continue
         for idx, row in df_read.iterrows():
             dict = {'Application': application, 'Operation': 'Read', 'Cluster Number': cluster_no,
-            'Cluster Size': no_runs, 'Filename': row['Filename']}
+            'Cluster Size': no_runs, 'Filename': row['Filename'], 'Performance': row['Read Performance'], 
+            'I/O Amount': row['Amount of Read I/O'], 'Start Time': row['Start Time'], 'End Time': row['End Time']}
             df_return = df_return.append(dict, ignore_index=True)
         cluster_no = cluster_no + 1
     # Now write
@@ -152,7 +156,8 @@ def _cluster_with_run_info(args):
             continue
         for idx, row in df_write.iterrows():
             dict = {'Application': application, 'Operation': 'Write', 'Cluster Number': cluster_no,
-            'Cluster Size': no_runs, 'Filename': row['Filename']}
+            'Cluster Size': no_runs, 'Filename': row['Filename'], 'Performance': row['Write Performance'], 
+            'I/O Amount': row['Amount of Write I/O'], 'Start Time': row['Start Time'], 'End Time': row['End Time']}
             df_return = df_return.append(dict, ignore_index=True)
         cluster_no = cluster_no + 1
     return df_return
