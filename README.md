@@ -52,10 +52,9 @@ Next, using the information collected in the previous step, we can cluster the r
 
 `
     run_info: pd.DataFrame
-        Dataframe containing the run info for clustering, as collected from 
-        a function in data_collection. Needs application, time, and cluster
-        parameters.
-
+        Dataframe containing the run info for clustering, as collected and 
+        returned from a function in data_collection. Needs application, time, 
+        and cluster parameters.
 
     threshold: int, optional
         The threshold for how many times an application needs to be run in 

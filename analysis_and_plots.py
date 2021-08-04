@@ -14,7 +14,7 @@ import scipy.stats as stats
 from datetime import datetime, timezone
 from dateutil import tz
 
-def cluster_characteristics(clustered_runs, save_path='./figures/cluster_characteristics.pdf', plot_log=False, verbose=False):
+def cluster_characteristics(clustered_runs, save_directory='./', verbose=False):
     '''
     Analyzes the number of clusters by application and number of runs by cluster.
     Plots the CDF of both the metrics.
@@ -133,10 +133,9 @@ def cluster_characteristics(clustered_runs, save_path='./figures/cluster_charact
     vals = axes[1].get_yticks()
     axes[1].set_yticklabels(['{:,.0%}'.format(x) for x in vals])
     fig.tight_layout()
-    save_dir = "/".join(save_path.split('/')[:-1])
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-    plt.savefig(save_path)
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
+    plt.savefig(join(save_directory,'cluster_characteristics.pdf'))
     return None
 
 def general_temporal_trends(clustered_runs, save_directory='./', verbose=False):
@@ -163,6 +162,8 @@ def general_temporal_trends(clustered_runs, save_directory='./', verbose=False):
     -------
     None
     '''
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
     clustered_runs['End Time'] = clustered_runs['End Time'].astype(float)
     clustered_runs['Start Time'] = clustered_runs['Start Time'].astype(float)
     # Read
@@ -550,11 +551,13 @@ def general_temporal_trends(clustered_runs, save_directory='./', verbose=False):
     #print(results)
     return None
 
-def io_performance_variability(clustered_runs, save_directory):
+def io_performance_variability(clustered_runs, save_directory='./'):
     '''
     overall I/O performance variability, day of week, time of day, time span, 
     I/O amount, check is cluster size is factor, temporal phasing.
     '''
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
     cluster_info = pd.DataFrame() # Average I/O Amount (bytes), Performance CoV (%), Number of Runs, Total Time
     clustered_runs['End Time'] = clustered_runs['End Time'].astype(float)
     clustered_runs['Start Time'] = clustered_runs['Start Time'].astype(float)

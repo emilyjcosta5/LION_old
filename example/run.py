@@ -11,12 +11,12 @@ if __name__=='__main__':
     path_to_data     = './data/run_info.parquet'
     path_to_clusters = './data/cluster_info.parquet' 
     
-    # Collect info
-    run_info = collect_darshan_data(path_to_total, save_path=path_to_data, verbose=True)
+    # Collect infos
+    run_info = collect_darshan_data(path_to_total, save_path=path_to_data, verbose=False)
 
     # Cluster runs
-    run_info = pd.read_parquet(path_to_data)
-    cluster_info = cluster_runs(run_info, threshold=5, save_path=path_to_clusters, verbose=True)
+    run_info = pd.read_parquet(path_to_data) # you need to feed the function a dataframe, not path to the info file
+    cluster_info = cluster_runs(run_info, threshold=5, save_path=path_to_clusters, verbose=False)
      
     # Analysis and Plotting
     clustered_runs    = pd.read_parquet(path_to_clusters)
