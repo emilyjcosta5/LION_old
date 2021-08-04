@@ -6,8 +6,8 @@ from os.path import join
 
 if __name__=='__main__':
     path_to_total    = './parsed_darshan_logs'
-    path_to_data     = './outputs/data/run_info.parquet'
-    path_to_clusters = './outputs/data/cluster_info.parquet' 
+    path_to_data     = './run_info.parquet'
+    path_to_clusters = './cluster_info.parquet' 
     
     # Collect info
     run_info = collect_darshan_data(path_to_total, save_path=path_to_data, verbose=True)
@@ -18,7 +18,7 @@ if __name__=='__main__':
      
     # Analysis and Plotting
     clustered_runs    = pd.read_parquet(path_to_clusters)
-    path_to_figures = './example/outputs/figures'
+    path_to_figures = './figures'
     path_to_cc      = join(path_to_figures, 'cluster_characteristics.pdf')
     cluster_characteristics(clustered_runs, save_path=path_to_cc)
     general_temporal_trends(clustered_runs, save_directory=path_to_figures)
