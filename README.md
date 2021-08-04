@@ -6,7 +6,7 @@ As I/O demand of scientific applications increases, identifying, predicting, and
 
 Darshan is available here: https://www.mcs.anl.gov/research/projects/darshan/download/
 Darshan util installation instructions needed for parsing files: https://www.mcs.anl.gov/research/projects/darshan/docs/darshan-util.html
-Python dependies: pyarrow, numpy, pandas, sklearn, multiprocessing, matplotlib, seaborn
+Python dependies: scikit-learn, scipy, seaborn, pyarrow, numpy, pandas, matplotlib
 
 ## Usage and Instructions
 The three major steps in identifying I/O behaviors are (1) setting up the logs to be accessible, (2) collecting information from the runs for clustering, (3) clustering the runs, and (4) analysis. These steps must be completed in order and are provided below.

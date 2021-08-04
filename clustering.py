@@ -4,12 +4,11 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import time
 from sklearn.cluster import AgglomerativeClustering
-import dask.dataframe as dd
 import pandas as pd
 from os import walk, mkdir
 from os.path import join, isfile, exists
 import numpy as np
-from multiprocessing import Pool, cpu_count, Process
+from multiprocessing import Pool, cpu_count
 from sklearn.preprocessing import StandardScaler
 
 def cluster_runs(run_info, ranks=None, threshold=40, save_path=None, chunksize=1000, verbose=False):
