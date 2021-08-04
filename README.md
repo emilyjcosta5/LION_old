@@ -96,4 +96,4 @@ Finally, once our runs are clustered such that runs in a cluster use the same ap
 `
 
 ## Example
-To run an example that uses a week of Darshan logs from a production HPC system, scripts are available in `/example`. Simple run 'source run.sh' in that directory. The clustering information will be saved to `example/data` and figures will be save to `example/figures`.
+To run an example that uses a week of Darshan logs from a production HPC system, scripts are available in `/example`. Examples Darshan logs are included in `unparsed_darshan_logs` which are available for trying step (1). Tthe run script uses logs that are decompressed and parsed already in `parsed_darshan_logs` and therefore starts at step (2). Simple run 'source run.sh' in that directory. The clustering information will be saved to `example/data` and figures will be save to `example/figures`.
