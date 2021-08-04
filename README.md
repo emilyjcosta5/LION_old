@@ -82,10 +82,13 @@ Next, using the information collected in the previous step, we can cluster the r
 The `run_info` input is a DataFrame with the information collected and saved in the `collect_darshan_data` function. Similarly to the previous function, this function can scale to the HPC node in use and implements tiling. The threshold is the minimum number of runs in a cluster needed for that cluster to be saved and can be adjusted based on the user's expectation during the analysis (ex. one might want to reduce the threshold in a smaller production system in order to include a higher ratio of applications ran). 
 ### 3. Analyze and Plot I/O Behavior
 Finally, once our runs are clustered such that runs in a cluster use the same application, have the same I/O operation (read or write), and exhibit similar I/O characteristics, we can analyze the clusters and runs within them. We break this down in a few functions: characterizing the cluster, general I/O trends, and I/O performance variability. In order to generate figures, input these two parameters for any or all of the functions:
+
 `
 clustered_runs: pd.DataFrame
     DataFrame containing run information, including how they are clustered, as
     generated from cluster_runs.
+
+
 save_directory: string, optional
     Where to save the output data or generated figures. Defaults to current
     working directory.
