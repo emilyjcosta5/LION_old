@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(1, '../.')
 from data_collection import collect_darshan_data
 from clustering import cluster_runs
 from analysis_and_plots import cluster_characteristics, general_temporal_trends, io_performance_variability
@@ -6,8 +8,8 @@ from os.path import join
 
 if __name__=='__main__':
     path_to_total    = './parsed_darshan_logs'
-    path_to_data     = './run_info.parquet'
-    path_to_clusters = './cluster_info.parquet' 
+    path_to_data     = './data/run_info.parquet'
+    path_to_clusters = './data/cluster_info.parquet' 
     
     # Collect info
     run_info = collect_darshan_data(path_to_total, save_path=path_to_data, verbose=True)
