@@ -50,7 +50,8 @@ For scraping massive data on HPC systems, it is useful to scale it to the number
 ### 2. Cluster Runs
 Next, using the information collected in the previous step, we can cluster the runs based on application, user, and I/O characteristics using the function from `LION.clustering.cluster_runs`. This function outputs a parquet file with the cluster information, whether in a read or write cluster, for all the runs collected by Darshan. The following are the inputs for the `cluster_runs` function:
 
-`   run_info: pd.DataFrame
+`
+    run_info: pd.DataFrame
         Dataframe containing the run info for clustering, as collected from 
         a function in data_collection. Needs application, time, and cluster
         parameters.
@@ -84,14 +85,14 @@ The `run_info` input is a DataFrame with the information collected and saved in 
 Finally, once our runs are clustered such that runs in a cluster use the same application, have the same I/O operation (read or write), and exhibit similar I/O characteristics, we can analyze the clusters and runs within them. We break this down in a few functions: characterizing the cluster, general I/O trends, and I/O performance variability. In order to generate figures, input these two parameters for any or all of the functions:
 
 `
-clustered_runs: pd.DataFrame
-    DataFrame containing run information, including how they are clustered, as
-    generated from cluster_runs.
+    clustered_runs: pd.DataFrame
+        DataFrame containing run information, including how they are clustered, as
+        generated from cluster_runs.
 
 
-save_directory: string, optional
-    Where to save the output data or generated figures. Defaults to current
-    working directory.
+    save_directory: string, optional
+        Where to save the output data or generated figures. Defaults to current
+        working directory.
 `
 
 ## Example
