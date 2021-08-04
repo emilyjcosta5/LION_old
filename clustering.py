@@ -123,7 +123,6 @@ def _cluster_with_run_info(args):
                     'Read 4M-10M', 'Read 10M-100M', 'Read 100M-1G', 'Read 1G+']].copy()
     clustering_reads  = AgglomerativeClustering(n_clusters=None, compute_full_tree=True, distance_threshold=0.1).fit(X)
     df_results['Cluster Read'] = clustering_reads.labels_
-    print(df_results)
     # Divide by cluster
     max_read  = df_results['Cluster Read'].max()
     max_write = df_results['Cluster Write'].max()

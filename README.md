@@ -6,7 +6,7 @@ As I/O demand of scientific applications increases, identifying, predicting, and
 
 Darshan is available here: https://www.mcs.anl.gov/research/projects/darshan/download/
 Darshan util installation instructions needed for parsing files: https://www.mcs.anl.gov/research/projects/darshan/docs/darshan-util.html
-Python dependies: pyarrow, numpy, pandas, sklearn, multiprocessing, matplotlib 
+Python dependies: pyarrow, numpy, pandas, sklearn, multiprocessing, matplotlib, seaborn
 
 ## Usage and Instructions
 The three major steps in identifying I/O behaviors are (1) data engineering, (2) clustering runs, and (3) analysis. 
@@ -82,3 +82,6 @@ Next, using the information collected in the previous step, we can cluster the r
 The `run_info` input is a DataFrame with the information collected and saved in the `collect_darshan_data` function. Similarly to the previous function, this function can scale to the HPC node in use and implements tiling. The threshold is the minimum number of runs in a cluster needed for that cluster to be saved and can be adjusted based on the user's expectation during the analysis (ex. one might want to reduce the threshold in a smaller production system in order to include a higher ratio of applications ran). 
 ### 3. Analyze and Plot I/O Behavior
 Finally, once our runs are clustered such that runs in a cluster use the same application, have the same I/O operation (read or write), and exhibit similar I/O characteristics, we can analyze the clusters and runs within them. 
+
+## Example
+To run an example that uses a week of Darshan logs from a production HPC system, scripts are available in `/example`. Simple run 'source run.sh' in that directory.
